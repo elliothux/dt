@@ -1,50 +1,35 @@
 import "./index.scss";
 import * as React from "react";
-import { Graph, Maybe } from "types";
+import { Maybe } from "types";
+import { observer } from "mobx-react";
+import { canvasStore } from "../../store";
+import { renderGraph } from "../../graphs";
 
+@observer
 export class Canvas extends React.Component {
-  private ref: Maybe<HTMLCanvasElement> = null;
-
-  private ctx: Maybe<CanvasRenderingContext2D> = null;
-
-  private canvasPosition: [number, number] = [100, 100];
-
-  private startPosition: [number, number] = [0, 0];
-
-  private graphs: Graph[] = [];
-
-  private drawingGraph: Maybe<Graph> = null;
+  private ref: Maybe<SVGSVGElement> = null;
 
   public componentDidMount(): void {
-    const ctx = this.ctx!;
-    ctx!.fillStyle = "red";
-    ctx.fillRect(10, 10, 55, 50);
+    canvasStore.addGraphs(new RectGraph())
   }
 
-  private setRef = (node: HTMLCanvasElement) => {
+  private setRef = (node: SVGSVGElement) => {
     this.ref = node;
-    this.ctx = node.getContext("2d");
-  };
-
-  private onMouseDown = (e: React.MouseEvent) => {
-    console.log(e.clientX, e.clientY);
-    const [x, y] = this.canvasPosition;
-    this.startPosition = [e.clientX - x, e.clientY - y];
-  };
-
-  private drawRect = (endX: number, endY: number) => {
-    const [startX, startY] = this.startPosition;
   };
 
   render() {
     return (
-      <canvas
+      <svg
+        version="1.1"
+        baseProfile="full"
+        xmlns="http://www.w3.org/2000/svg"
         className="main-canvas"
         ref={this.setRef}
-        onMouseDown={this.onMouseDown}
         width={1200}
         height={800}
-      />
+      >
+        {canvasStore.graphs.map(renderGraph)}
+      </svg>
     );
   }
 }
