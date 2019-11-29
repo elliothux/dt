@@ -1,0 +1,10 @@
+@import "../../styles/variables";
+
+.graph-rect {
+  fill: red;
+
+  &:hover {
+    stroke-width: 2px;
+    stroke: $main-highlight-color;
+  }
+}

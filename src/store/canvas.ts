@@ -13,3 +13,9 @@ export class CanvasStore {
 }
 
 export const canvasStore = new CanvasStore();
+
+Object.defineProperty(window, "__canvasStore", {
+  get(): CanvasStore {
+    return canvasStore;
+  }
+});
