@@ -3,7 +3,7 @@ import * as React from "react";
 import { Maybe } from "types";
 import { observer } from "mobx-react";
 import { canvasStore } from "../../store";
-import { renderGraph } from "../../graphs";
+import { GraphRender } from "../../graphs";
 import { RectGraph } from "../../graphs";
 
 @observer
@@ -14,14 +14,11 @@ export class Canvas extends React.Component {
     canvasStore.addGraphs(
       new RectGraph({ width: 100, height: 200, x: 100, y: 100 })
     );
+    window.addEventListener("click", canvasStore.unSelectGraph);
   }
 
   private setRef = (node: SVGSVGElement) => {
     this.ref = node;
-  };
-
-  private onClick = (e: React.MouseEvent<SVGSVGElement>) => {
-    console.log(e.target);
   };
 
   render() {
@@ -35,7 +32,9 @@ export class Canvas extends React.Component {
         height={800}
         ref={this.setRef}
       >
-        {canvasStore.graphs.map(renderGraph)}
+        {canvasStore.graphs.map((graph, index) => (
+          <GraphRender key={graph.key} index={index} graph={graph} />
+        ))}
       </svg>
     );
   }

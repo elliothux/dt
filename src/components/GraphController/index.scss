@@ -1,0 +1,36 @@
+@import "../../styles/variables";
+
+.graph-controller {
+  &.selected {
+    stroke-width: 1px;
+    stroke: $main-highlight-color;
+  }
+
+  .controller-rect {
+    stroke: $main-highlight-color;
+    stroke-width: 1;
+    width: 8px;
+    height: 8px;
+    fill: white;
+
+    &.top-left,
+    &.bottom-right {
+      cursor: nwse-resize;
+    }
+
+    &.top-right,
+    &.bottom-left {
+      cursor: nesw-resize;
+    }
+
+    &.top,
+    &.bottom {
+      cursor: ns-resize;
+    }
+
+    &.left,
+    &.right {
+      cursor: ew-resize;
+    }
+  }
+}
