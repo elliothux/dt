@@ -12,6 +12,18 @@
     stroke-width: 1px;
   }
 
+  .controller-line {
+    stroke: $main-highlight-color;
+    stroke-width: 1px;
+  }
+
+  .controller-circle {
+    fill: white;
+    stroke: $main-highlight-color;
+    stroke-width: 1px;
+    cursor: move;
+  }
+
   .controller-rect {
     stroke: $main-highlight-color;
     stroke-width: 1;

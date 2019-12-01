@@ -3,8 +3,8 @@ import "./index.scss";
 import * as React from "react";
 import { observer } from "mobx-react";
 import { BaseGraphControllerProps } from "graphs";
-import { PX } from "types";
-import { translate } from "../../utils";
+import { DEG, PX } from "types";
+import { rotateDeg, translate } from "../../utils";
 import { canvasStore } from "../../store";
 import { DragObserver } from "../DragObserver";
 import { Resizer } from "./Resizer";
@@ -19,7 +19,8 @@ export class GraphController extends React.Component<Props> {
     moveTop: 0,
     moveBottom: 0,
     moveLeft: 0,
-    moveRight: 0
+    moveRight: 0,
+    moveRotate: 0
   };
 
   private selectGraph = () => canvasStore.selectGraph(this.props.index);
@@ -81,6 +82,12 @@ export class GraphController extends React.Component<Props> {
     canvasStore.changeGraphSize(this.props.index, moveRight, 0);
   };
 
+  private onMoveRotate = (moveRotate: DEG) => {
+    this.setState({ moveRotate });
+  };
+
+  private onMoveRotateEnd = (rotate: DEG) => {};
+
   public render() {
     const {
       moveX,
@@ -88,19 +95,22 @@ export class GraphController extends React.Component<Props> {
       moveTop,
       moveBottom,
       moveLeft,
-      moveRight
+      moveRight,
+      moveRotate
     } = this.state;
     const { graph, children } = this.props;
     const {
-      renderProps: { x, y, width, height },
+      renderProps: { x, y, width, height, rotate },
       selected
     } = graph;
 
     const newWidth = width + moveRight - moveLeft;
     const newHeight = height + moveBottom - moveTop;
 
-    const translateX = x + moveX + moveLeft;
-    const translateY = y + moveY + moveTop;
+    const transform = [
+      translate(x + moveX + moveLeft, y + moveY + moveTop),
+      rotateDeg(rotate + moveRotate)
+    ].join(" ");
 
     return (
       <DragObserver
@@ -110,8 +120,9 @@ export class GraphController extends React.Component<Props> {
       >
         <g
           className={`graph-controller${selected ? " selected" : ""}`}
-          transform={translate(translateX, translateY)}
           onClick={this.onClick}
+          transform={transform}
+          style={{ transformOrigin: `${width / 2}px ${height / 2}px` }}
         >
           {React.cloneElement(children, {
             width: newWidth,
@@ -132,6 +143,8 @@ export class GraphController extends React.Component<Props> {
               onMoveLeftEnd={this.onMoveLeftEnd}
               onMoveRight={this.onMoveRight}
               onMoveRightEnd={this.onMoveRightEnd}
+              onMoveRotate={this.onMoveRotate}
+              onMoveRotateEnd={this.onMoveRotateEnd}
             />
           ) : null}
         </g>
