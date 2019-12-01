@@ -1,16 +1,17 @@
 import * as React from "react";
 import { RectGraph } from "./Rect";
-import { Key, PX } from "../types";
+import { EllipseGraph } from "./Ellipse";
+import { Key, PX, WithReactChild } from "../types";
 import { Color, RGB } from "../modules/color";
 
 export enum GraphTypes {
-  CIRCLE = "circle",
+  ELLIPSE = "ellipse",
   LINE = "line",
   POLYGON = "polygon",
   RECT = "rect"
 }
 
-export type Graph = RectGraph;
+export type Graph = RectGraph | EllipseGraph;
 
 export interface BaseGraphRenderProps {
   x: PX;
@@ -30,14 +31,24 @@ export const baseGraphRenderProps: BaseGraphRenderProps = {
   color: RGB(128, 128, 128)
 };
 
-export interface BaseGraph<T extends BaseGraphRenderProps> {
+export interface BaseGraphControllerProps extends WithReactChild {
+  index: number;
+  graph: Graph;
+}
+
+export interface BaseGraph<
+  T extends BaseGraphRenderProps,
+  U extends BaseGraphControllerProps = BaseGraphControllerProps
+> {
   readonly type: GraphTypes;
 
   readonly key: Key;
 
+  readonly Render: React.ComponentType<T>;
+
+  readonly Controller: React.ComponentType<U>;
+
   selected: boolean;
 
   renderProps: T;
-
-  Render: React.ComponentType<T>;
 }

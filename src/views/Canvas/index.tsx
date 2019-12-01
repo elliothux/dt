@@ -3,7 +3,7 @@ import * as React from "react";
 import { Maybe } from "types";
 import { observer } from "mobx-react";
 import { canvasStore } from "../../store";
-import { GraphRender } from "../../graphs";
+import { EllipseGraph, GraphRender } from "../../graphs";
 import { RectGraph } from "../../graphs";
 
 @observer
@@ -11,8 +11,11 @@ export class Canvas extends React.Component {
   private ref: Maybe<SVGSVGElement> = null;
 
   public componentDidMount(): void {
-    canvasStore.addGraphs(
+    canvasStore.addGraph(
       new RectGraph({ width: 100, height: 200, x: 100, y: 100 })
+    );
+    canvasStore.addGraph(
+      new EllipseGraph({ width: 200, height: 200, x: 500, y: 500 })
     );
     window.addEventListener("click", canvasStore.unSelectGraph);
   }

@@ -62,6 +62,12 @@ export class Resizer extends React.PureComponent<Props> {
     const { width, height, originalWidth, originalHeight } = this.props;
     return (
       <>
+        <rect
+          className="controller-outline-rect"
+          width={width}
+          height={height}
+        />
+
         <DragObserver
           onDrag={this.onMoveLeftTop}
           onDragEnd={this.onMoveLeftTopEnd}

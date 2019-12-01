@@ -2,17 +2,14 @@ import "./index.scss";
 
 import * as React from "react";
 import { observer } from "mobx-react";
-import { Graph } from "graphs";
-import { PX, WithReactChild } from "types";
+import { BaseGraphControllerProps } from "graphs";
+import { PX } from "types";
 import { translate } from "../../utils";
 import { canvasStore } from "../../store";
 import { DragObserver } from "../DragObserver";
 import { Resizer } from "./Resizer";
 
-interface Props extends WithReactChild {
-  graph: Graph;
-  index: number;
-}
+interface Props extends BaseGraphControllerProps {}
 
 @observer
 export class GraphController extends React.Component<Props> {
@@ -102,6 +99,9 @@ export class GraphController extends React.Component<Props> {
     const newWidth = width + moveRight - moveLeft;
     const newHeight = height + moveBottom - moveTop;
 
+    const translateX = x + moveX + moveLeft;
+    const translateY = y + moveY + moveTop;
+
     return (
       <DragObserver
         onDragStart={this.selectGraph}
@@ -110,7 +110,7 @@ export class GraphController extends React.Component<Props> {
       >
         <g
           className={`graph-controller${selected ? " selected" : ""}`}
-          transform={translate(x + moveX + moveLeft, y + moveY + moveTop)}
+          transform={translate(translateX, translateY)}
           onClick={this.onClick}
         >
           {React.cloneElement(children, {

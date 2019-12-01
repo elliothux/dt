@@ -1,7 +1,6 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import { Graph } from "./types";
-import { GraphController } from "../components/GraphController";
 
 interface Props {
   graph: Graph;
@@ -9,10 +8,11 @@ interface Props {
 }
 
 function IGraphRender({ graph, index }: Props) {
+  const { Controller } = graph;
   return (
-    <GraphController key={graph.key} graph={graph} index={index}>
+    <Controller key={graph.key} graph={graph} index={index}>
       {React.createElement(graph.Render, graph.renderProps)}
-    </GraphController>
+    </Controller>
   );
 }
 

@@ -1,13 +1,14 @@
 import { action, observable, toJS } from "mobx";
 import { Graph } from "../graphs";
 import { PX } from "../types";
+import { isArray } from "../utils";
 
 export class CanvasStore {
   @observable
   public graphs: Graph[] = [];
 
   @action
-  public addGraphs = (graph: Graph) => {
+  public addGraph = (graph: Graph): Graph => {
     this.graphs.push(graph);
     return graph;
   };
@@ -15,7 +16,7 @@ export class CanvasStore {
   private selectedIndex: number = -1;
 
   @action
-  public selectGraph = (index: number) => {
+  public selectGraph = (index: number): void => {
     if (this.selectedIndex === index) {
       return;
     }
@@ -29,7 +30,7 @@ export class CanvasStore {
   };
 
   @action
-  public unSelectGraph = () => {
+  public unSelectGraph = (): void => {
     if (this.selectedIndex < 0) {
       return;
     }
@@ -39,21 +40,25 @@ export class CanvasStore {
   };
 
   @action
-  public setGraphPosition = (index: number, x: number, y: number) => {
+  public setGraphPosition = (index: number, x: number, y: number): void => {
     const { renderProps } = this.graphs[index]!;
     renderProps.x = x;
     renderProps.y = y;
   };
 
   @action
-  public moveGraphPosition = (index: number, moveX: number, moveY: number) => {
+  public moveGraphPosition = (
+    index: number,
+    moveX: number,
+    moveY: number
+  ): void => {
     const { renderProps } = this.graphs[index]!;
     renderProps.x += moveX;
     renderProps.y += moveY;
   };
 
   @action
-  public setGraphSize = (index: number, width: PX, height: PX) => {
+  public setGraphSize = (index: number, width: PX, height: PX): void => {
     const { renderProps } = this.graphs[index]!;
     renderProps.width = width;
     renderProps.height = height;
@@ -64,7 +69,7 @@ export class CanvasStore {
     index: number,
     changeWidth: PX,
     changeHeight: PX
-  ) => {
+  ): void => {
     const { renderProps } = this.graphs[index]!;
     renderProps.width += changeWidth;
     renderProps.height += changeHeight;

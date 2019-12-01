@@ -6,6 +6,12 @@
     stroke: $main-highlight-color;
   }
 
+  .controller-outline-rect {
+    fill: none;
+    stroke: $main-highlight-color;
+    stroke-width: 1px;
+  }
+
   .controller-rect {
     stroke: $main-highlight-color;
     stroke-width: 1;

@@ -2,28 +2,28 @@ import { Key } from "types";
 import { generateKey, KeyNamespace } from "utils";
 import {
   BaseGraph,
-  baseGraphRenderProps,
   BaseGraphRenderProps,
+  baseGraphRenderProps,
   GraphTypes
 } from "../types";
 import { observable } from "mobx";
-import { RectRender } from "./render";
+import { EllipseRender } from "./render";
 import { GraphController } from "../../components/GraphController";
 
-export interface RectProps extends BaseGraphRenderProps {}
+export interface EllipseRenderProps extends BaseGraphRenderProps {}
 
-export class RectGraph implements BaseGraph<RectProps> {
-  constructor(props?: Partial<RectProps>) {
+export class EllipseGraph implements BaseGraph<EllipseRenderProps> {
+  constructor(props?: Partial<EllipseRenderProps>) {
     if (props) {
       this.renderProps = { ...this.renderProps, ...props };
     }
   }
 
-  public readonly type: GraphTypes = GraphTypes.RECT;
+  public readonly type: GraphTypes = GraphTypes.ELLIPSE;
 
   public readonly key: Key = generateKey(KeyNamespace.GRAPH);
 
-  public readonly Render = RectRender;
+  public readonly Render = EllipseRender;
 
   public readonly Controller = GraphController;
 
@@ -31,7 +31,7 @@ export class RectGraph implements BaseGraph<RectProps> {
   public selected: boolean = false;
 
   @observable
-  public renderProps: RectProps = {
+  public renderProps: EllipseRenderProps = {
     ...baseGraphRenderProps
   };
 }
