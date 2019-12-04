@@ -24,7 +24,15 @@
     cursor: move;
   }
 
-  .controller-rect {
+  .rotate-controller {
+    stroke: none;
+    width: 18px;
+    height: 18px;
+    fill: $opacity;
+    cursor: pointer;
+  }
+
+  .size-controller {
     stroke: $main-highlight-color;
     stroke-width: 1;
     width: 8px;

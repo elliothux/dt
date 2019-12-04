@@ -38,42 +38,78 @@ export class Resizer extends React.PureComponent<Props> {
     return deg;
   };
 
-  private onMoveLeftTop = (moveX: PX, moveY: PX) => {
+  private onMoveTop = (e: React.MouseEvent, moveY: PX) => {
+    this.props.onMoveTop(moveY);
+  };
+
+  private onMoveLeft = (e: React.MouseEvent, moveX: PX) => {
+    this.props.onMoveLeft(moveX);
+  };
+
+  private onMoveRight = (e: React.MouseEvent, moveX: PX) => {
+    this.props.onMoveRight(moveX);
+  };
+
+  private onMoveBottom = (e: React.MouseEvent, moveY: PX) => {
+    this.props.onMoveBottom(moveY);
+  };
+
+  private onMoveTopEnd = (e: React.MouseEvent, moveY: PX) => {
+    this.props.onMoveTopEnd(moveY);
+  };
+
+  private onMoveLeftEnd = (e: React.MouseEvent, moveX: PX) => {
+    this.props.onMoveLeftEnd(moveX);
+  };
+
+  private onMoveRightEnd = (e: React.MouseEvent, moveX: PX) => {
+    this.props.onMoveRightEnd(moveX);
+  };
+
+  private onMoveBottomEnd = (e: React.MouseEvent, moveY: PX) => {
+    this.props.onMoveBottomEnd(moveY);
+  };
+
+  private onMoveLeftTop = (e: React.MouseEvent, moveX: PX, moveY: PX) => {
     this.props.onMoveLeft(moveX);
     this.props.onMoveTop(moveY);
   };
 
-  private onMoveLeftTopEnd = (moveX: PX, moveY: PX) => {
+  private onMoveLeftTopEnd = (e: React.MouseEvent, moveX: PX, moveY: PX) => {
     this.props.onMoveLeftEnd(moveX);
     this.props.onMoveTopEnd(moveY);
   };
 
-  private onMoveLeftBottom = (moveX: PX, moveY: PX) => {
+  private onMoveLeftBottom = (e: React.MouseEvent, moveX: PX, moveY: PX) => {
     this.props.onMoveLeft(moveX);
     this.props.onMoveBottom(moveY);
   };
 
-  private onMoveLeftBottomEnd = (moveX: PX, moveY: PX) => {
+  private onMoveLeftBottomEnd = (e: React.MouseEvent, moveX: PX, moveY: PX) => {
     this.props.onMoveLeftEnd(moveX);
     this.props.onMoveBottomEnd(moveY);
   };
 
-  private onMoveRightTop = (moveX: PX, moveY: PX) => {
+  private onMoveRightTop = (e: React.MouseEvent, moveX: PX, moveY: PX) => {
     this.props.onMoveRight(moveX);
     this.props.onMoveTop(moveY);
   };
 
-  private onMoveRightTopEnd = (moveX: PX, moveY: PX) => {
+  private onMoveRightTopEnd = (e: React.MouseEvent, moveX: PX, moveY: PX) => {
     this.props.onMoveRightEnd(moveX);
     this.props.onMoveTopEnd(moveY);
   };
 
-  private onMoveRightBottom = (moveX: PX, moveY: PX) => {
+  private onMoveRightBottom = (e: React.MouseEvent, moveX: PX, moveY: PX) => {
     this.props.onMoveRight(moveX);
     this.props.onMoveBottom(moveY);
   };
 
-  private onMoveRightBottomEnd = (moveX: PX, moveY: PX) => {
+  private onMoveRightBottomEnd = (
+    e: React.MouseEvent,
+    moveX: PX,
+    moveY: PX
+  ) => {
     this.props.onMoveRightEnd(moveX);
     this.props.onMoveBottomEnd(moveY);
   };
@@ -99,13 +135,26 @@ export class Resizer extends React.PureComponent<Props> {
           height={height}
         />
 
+        <rect className="rotate-controller top-left" x={-10} y={-10} />
+        <rect className="rotate-controller top-right" x={width - 8} y={-10} />
+        <rect
+          className="rotate-controller bottom-left"
+          x={-10}
+          y={height - 8}
+        />
+        <rect
+          className="rotate-controller bottom-right"
+          x={width - 8}
+          y={height - 8}
+        />
+
         <DragObserver
           onDrag={this.onMoveLeftTop}
           onDragEnd={this.onMoveLeftTopEnd}
           maxX={originalWidth - 1}
           maxY={originalHeight - 1}
         >
-          <rect className="controller-rect top-left" x={-4} y={-4} />
+          <rect className="size-controller top-left" x={-4} y={-4} />
         </DragObserver>
         <DragObserver
           onDrag={this.onMoveRightTop}
@@ -113,7 +162,7 @@ export class Resizer extends React.PureComponent<Props> {
           minX={-originalWidth + 1}
           maxY={originalHeight - 1}
         >
-          <rect className="controller-rect top-right" x={width - 4} y={-4} />
+          <rect className="size-controller top-right" x={width - 4} y={-4} />
         </DragObserver>
         <DragObserver
           onDrag={this.onMoveLeftBottom}
@@ -121,7 +170,7 @@ export class Resizer extends React.PureComponent<Props> {
           maxX={originalWidth - 1}
           minY={-originalHeight + 1}
         >
-          <rect className="controller-rect bottom-left" x={-4} y={height - 4} />
+          <rect className="size-controller bottom-left" x={-4} y={height - 4} />
         </DragObserver>
         <DragObserver
           onDrag={this.onMoveRightBottom}
@@ -130,58 +179,58 @@ export class Resizer extends React.PureComponent<Props> {
           minY={-originalHeight + 1}
         >
           <rect
-            className="controller-rect bottom-right"
+            className="size-controller bottom-right"
             x={width - 4}
             y={height - 4}
           />
         </DragObserver>
 
         <DragObserver
-          onDragY={this.props.onMoveTop}
-          onDragYEnd={this.props.onMoveTopEnd}
+          onDragY={this.onMoveTop}
+          onDragYEnd={this.onMoveTopEnd}
           maxY={originalHeight - 1}
         >
-          <rect className="controller-rect top" x={halfW - 4} y={-4} />
+          <rect className="size-controller top" x={halfW - 4} y={-4} />
         </DragObserver>
         <DragObserver
-          onDragX={this.props.onMoveLeft}
-          onDragXEnd={this.props.onMoveLeftEnd}
+          onDragX={this.onMoveLeft}
+          onDragXEnd={this.onMoveLeftEnd}
           maxX={originalWidth - 1}
         >
-          <rect className="controller-rect left" x={-4} y={halfH - 4} />
+          <rect className="size-controller left" x={-4} y={halfH - 4} />
         </DragObserver>
         <DragObserver
-          onDragY={this.props.onMoveBottom}
-          onDragYEnd={this.props.onMoveBottomEnd}
+          onDragY={this.onMoveBottom}
+          onDragYEnd={this.onMoveBottomEnd}
           minY={-originalHeight + 1}
         >
           <rect
-            className="controller-rect bottom"
+            className="size-controller bottom"
             x={halfW - 4}
             y={height - 4}
           />
         </DragObserver>
         <DragObserver
-          onDragX={this.props.onMoveRight}
-          onDragXEnd={this.props.onMoveRightEnd}
+          onDragX={this.onMoveRight}
+          onDragXEnd={this.onMoveRightEnd}
           minX={-originalWidth + 1}
         >
-          <rect className="controller-rect right" x={width - 4} y={halfH - 4} />
+          <rect className="size-controller right" x={width - 4} y={halfH - 4} />
         </DragObserver>
 
-        <line
-          className="controller-line"
-          x1={halfW}
-          y1={-4}
-          x2={halfW}
-          y2={-42}
-        />
-        <DragObserver
-          onDrag={this.onMoveRotate}
-          onDragEnd={this.onMoveRotateEnd}
-        >
-          <circle className="controller-circle" cx={halfW} cy={-46} r={4} />
-        </DragObserver>
+        {/*<line*/}
+        {/*  className="controller-line"*/}
+        {/*  x1={halfW}*/}
+        {/*  y1={-4}*/}
+        {/*  x2={halfW}*/}
+        {/*  y2={-42}*/}
+        {/*/>*/}
+        {/*<DragObserver*/}
+        {/*  onDrag={this.onMoveRotate}*/}
+        {/*  onDragEnd={this.onMoveRotateEnd}*/}
+        {/*>*/}
+        {/*  <circle className="controller-circle" cx={halfW} cy={-46} r={4} />*/}
+        {/*</DragObserver>*/}
       </>
     );
   }

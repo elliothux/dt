@@ -1,15 +1,14 @@
 import * as React from "react";
 import { Maybe, WithReactChild } from "../../types";
-import { isNumber } from "../../utils";
 
 interface Props extends WithReactChild {
-  onDragStart?: (startX: number, startY: number) => void;
-  onDrag?: (moveX: number, moveY: number) => void;
-  onDragEnd?: (moveX: number, moveY: number) => void;
-  onDragX?: (moveX: number) => void;
-  onDragXEnd?: (moveX: number) => void;
-  onDragY?: (moveY: number) => void;
-  onDragYEnd?: (moveY: number) => void;
+  onDragStart?: (e: React.MouseEvent, startX: number, startY: number) => void;
+  onDrag?: (e: React.MouseEvent, moveX: number, moveY: number) => void;
+  onDragEnd?: (e: React.MouseEvent, moveX: number, moveY: number) => void;
+  onDragX?: (e: React.MouseEvent, moveX: number) => void;
+  onDragXEnd?: (e: React.MouseEvent, moveX: number) => void;
+  onDragY?: (e: React.MouseEvent, moveY: number) => void;
+  onDragYEnd?: (e: React.MouseEvent, moveY: number) => void;
   minX?: number;
   maxX?: number;
   minY?: number;
@@ -64,7 +63,7 @@ export class DragObserver<T extends Element> extends React.Component<Props> {
 
     this.bindEvent();
     if (this.props.onDragStart) {
-      this.props.onDragStart(e.clientX, e.clientY);
+      this.props.onDragStart(e, e.clientX, e.clientY);
     }
     this.startPosition = [e.clientX, e.clientY];
   };
@@ -75,7 +74,7 @@ export class DragObserver<T extends Element> extends React.Component<Props> {
 
     this.unbindEvent();
     this.startPosition = null;
-    this.onDragEnd();
+    this.onDragEnd(e as React.MouseEvent);
   };
 
   private onMouseMove = (e: React.MouseEvent<T> | MouseEvent) => {
@@ -87,41 +86,41 @@ export class DragObserver<T extends Element> extends React.Component<Props> {
     }
 
     const [startX, startY] = this.startPosition;
-    this.onDrag(e.clientX - startX, e.clientY - startY);
+    this.onDrag(e as React.MouseEvent, e.clientX - startX, e.clientY - startY);
   };
 
-  private onDrag = (iMoveX: number, iMoveY: number) => {
+  private onDrag = (e: React.MouseEvent, iMoveX: number, iMoveY: number) => {
     const moveX = this.getX(iMoveX);
     const moveY = this.getY(iMoveY);
 
     if (this.props.onDragX) {
-      this.props.onDragX(moveX);
+      this.props.onDragX(e, moveX);
     }
 
     if (this.props.onDragY) {
-      this.props.onDragY(moveY);
+      this.props.onDragY(e, moveY);
     }
 
     if (this.props.onDrag) {
-      this.props.onDrag(moveX, moveY);
+      this.props.onDrag(e, moveX, moveY);
     }
 
     this.setState({ moveX, moveY });
   };
 
-  private onDragEnd = () => {
+  private onDragEnd = (e: React.MouseEvent) => {
     const { moveX, moveY } = this.state;
 
     if (this.props.onDragEnd) {
-      this.props.onDragEnd(moveX, moveY);
+      this.props.onDragEnd(e, moveX, moveY);
     }
 
     if (this.props.onDragXEnd) {
-      this.props.onDragXEnd(moveX);
+      this.props.onDragXEnd(e, moveX);
     }
 
     if (this.props.onDragYEnd) {
-      this.props.onDragYEnd(moveY);
+      this.props.onDragYEnd(e, moveY);
     }
 
     this.setState({ moveX: 0, moveY: 0 });

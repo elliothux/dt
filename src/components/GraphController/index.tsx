@@ -31,11 +31,11 @@ export class GraphController extends React.Component<Props> {
     this.selectGraph();
   };
 
-  private onDrag = (moveX: number, moveY: number) => {
+  private onDrag = (e: React.MouseEvent, moveX: number, moveY: number) => {
     this.setState({ moveX, moveY });
   };
 
-  private onDragEnd = (moveX: number, moveY: number) => {
+  private onDragEnd = (e: React.MouseEvent, moveX: number, moveY: number) => {
     canvasStore.moveGraphPosition(this.props.index, moveX, moveY);
     this.setState({ moveX: 0, moveY: 0 });
   };
