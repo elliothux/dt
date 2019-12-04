@@ -1,5 +1,5 @@
 import * as React from "react";
-import { DEG, PX } from "../../types";
+import { PX } from "../../types";
 import { DragObserver } from "../DragObserver";
 
 interface Props {
@@ -15,29 +15,9 @@ interface Props {
   onMoveBottomEnd: (move: PX) => void;
   onMoveLeftEnd: (move: PX) => void;
   onMoveRightEnd: (move: PX) => void;
-  onMoveRotate: (rotate: DEG) => void;
-  onMoveRotateEnd: (rotate: DEG) => void;
 }
 
 export class Resizer extends React.PureComponent<Props> {
-  public static calcRotate = (x: PX, y: PX): DEG => {
-    // if (x === 0 && y === 0) {
-    //   return 0;
-    // }
-
-    const deg = (180 / Math.PI) * Math.atan2(y + (y > 0 ? 1 : -1) * 30, x);
-
-    // if (x > 0) {
-    //   return 90 - deg;
-    // }
-    //
-    // if (x < 0) {
-    //   return deg - 90;
-    // }
-
-    return deg;
-  };
-
   private onMoveTop = (e: React.MouseEvent, moveY: PX) => {
     this.props.onMoveTop(moveY);
   };
@@ -114,14 +94,6 @@ export class Resizer extends React.PureComponent<Props> {
     this.props.onMoveBottomEnd(moveY);
   };
 
-  private onMoveRotate = (moveX: PX, moveY: PX) => {
-    this.props.onMoveRotate(Resizer.calcRotate(moveX, moveY));
-  };
-
-  private onMoveRotateEnd = (moveX: PX, moveY: PX) => {
-    this.props.onMoveRotateEnd(Resizer.calcRotate(moveX, moveY));
-  };
-
   public render() {
     const { width, height, originalWidth, originalHeight } = this.props;
     const halfW = width / 2;
@@ -129,25 +101,6 @@ export class Resizer extends React.PureComponent<Props> {
 
     return (
       <>
-        <rect
-          className="controller-outline-rect"
-          width={width}
-          height={height}
-        />
-
-        <rect className="rotate-controller top-left" x={-10} y={-10} />
-        <rect className="rotate-controller top-right" x={width - 8} y={-10} />
-        <rect
-          className="rotate-controller bottom-left"
-          x={-10}
-          y={height - 8}
-        />
-        <rect
-          className="rotate-controller bottom-right"
-          x={width - 8}
-          y={height - 8}
-        />
-
         <DragObserver
           onDrag={this.onMoveLeftTop}
           onDragEnd={this.onMoveLeftTopEnd}
@@ -217,20 +170,6 @@ export class Resizer extends React.PureComponent<Props> {
         >
           <rect className="size-controller right" x={width - 4} y={halfH - 4} />
         </DragObserver>
-
-        {/*<line*/}
-        {/*  className="controller-line"*/}
-        {/*  x1={halfW}*/}
-        {/*  y1={-4}*/}
-        {/*  x2={halfW}*/}
-        {/*  y2={-42}*/}
-        {/*/>*/}
-        {/*<DragObserver*/}
-        {/*  onDrag={this.onMoveRotate}*/}
-        {/*  onDragEnd={this.onMoveRotateEnd}*/}
-        {/*>*/}
-        {/*  <circle className="controller-circle" cx={halfW} cy={-46} r={4} />*/}
-        {/*</DragObserver>*/}
       </>
     );
   }

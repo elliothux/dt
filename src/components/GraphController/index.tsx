@@ -8,6 +8,7 @@ import { rotateDeg, translate } from "../../utils";
 import { canvasStore } from "../../store";
 import { DragObserver } from "../DragObserver";
 import { Resizer } from "./Resizer";
+import { Rotater } from "./Rotater";
 
 interface Props extends BaseGraphControllerProps {}
 
@@ -86,7 +87,9 @@ export class GraphController extends React.Component<Props> {
     this.setState({ moveRotate });
   };
 
-  private onMoveRotateEnd = (rotate: DEG) => {};
+  private onMoveRotateEnd = (rotate: DEG) => {
+    this.setState({ moveRotate: rotate });
+  };
 
   public render() {
     const {
@@ -129,23 +132,35 @@ export class GraphController extends React.Component<Props> {
             height: newHeight
           })}
 
+          <rect
+            className="controller-outline-rect"
+            width={width}
+            height={height}
+          />
+
           {graph.selected ? (
-            <Resizer
-              width={newWidth}
-              height={newHeight}
-              originalWidth={width}
-              originalHeight={height}
-              onMoveTop={this.onMoveTop}
-              onMoveTopEnd={this.onMoveTopEnd}
-              onMoveBottom={this.onMoveBottom}
-              onMoveBottomEnd={this.onMoveBottomEnd}
-              onMoveLeft={this.onMoveLeft}
-              onMoveLeftEnd={this.onMoveLeftEnd}
-              onMoveRight={this.onMoveRight}
-              onMoveRightEnd={this.onMoveRightEnd}
-              onMoveRotate={this.onMoveRotate}
-              onMoveRotateEnd={this.onMoveRotateEnd}
-            />
+            <>
+              <Rotater
+                width={width}
+                height={height}
+                onMoveRotate={this.onMoveRotate}
+                onMoveRotateEnd={this.onMoveRotateEnd}
+              />
+              <Resizer
+                width={newWidth}
+                height={newHeight}
+                originalWidth={width}
+                originalHeight={height}
+                onMoveTop={this.onMoveTop}
+                onMoveTopEnd={this.onMoveTopEnd}
+                onMoveBottom={this.onMoveBottom}
+                onMoveBottomEnd={this.onMoveBottomEnd}
+                onMoveLeft={this.onMoveLeft}
+                onMoveLeftEnd={this.onMoveLeftEnd}
+                onMoveRight={this.onMoveRight}
+                onMoveRightEnd={this.onMoveRightEnd}
+              />
+            </>
           ) : null}
         </g>
       </DragObserver>
